@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from './Header/Header';
 class TaskApp extends React.Component {
 	constructor() {
 		super();
@@ -7,7 +8,8 @@ class TaskApp extends React.Component {
 		}
 	}
 	render() {
-		return (<div className="app-all-wrapper">test
+		return (<div className="app-all-wrapper">
+			<Header/>
 		</div>)
 	}
 }
