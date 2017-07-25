@@ -1,18 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-	createStore
-} from 'redux'
-import {
-	Provider
-} from 'react-redux'
-import TaskApp from './containers/TaskApp'
-import taskReducer from './reducers/reducer'
-import './index.css'
+import './reset.css'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import TodoApp from './containers/TodoApp'
+import todoReducer from './reducers/store'
 
-// const store = createStore(commentsReducer)
+const store = createStore(todoReducer);
 
 ReactDOM.render(
-	<TaskApp />,
+	<Provider store={store}>
+			<TodoApp />
+	</Provider>,
 	document.getElementById('root')
 );

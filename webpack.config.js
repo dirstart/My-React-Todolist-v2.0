@@ -19,7 +19,7 @@ module.exports = {
 			exclude: /node_modules/,
 			include: path.resolve(__dirname, 'app'),
 			query: {
-				presets: ['react', 'es2015']
+				presets: ['react', 'es2015','stage-0']
 			}
 		}, {
 			test: /\.css$/,
@@ -67,7 +67,7 @@ module.exports = {
 						// 这个是用来处理import情况的
 						require('autoprefixer')(),
 						require('cssnano')
-						// 这句话应该是用来压缩的
+						// 这句话是用来压缩的
 					]
 				}
 			}, {
