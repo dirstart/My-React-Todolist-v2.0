@@ -2,14 +2,13 @@ import React from 'react';
 import TodoList from '../components/TodoList';
 import DustbinList from '../components/DustbinList';
 import TodoInput from '../components/TodoInput';
+import PropTypes from 'prop-types';
+
+// The real Redux is start
+import { connect } from 'react-redux'
+import {addTodo} from '../actions';
 
 class TodoApp extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            contents: []
-        }
-    }
     componentWillMount() {
         this._loadLocalStorage();
     }
@@ -23,12 +22,12 @@ class TodoApp extends React.Component {
         }
     }
     _saveLocalStorage() {
-        let {contents} = this.state;
+        let {contents} = this.props;
         contents = JSON.stringify(contents);
         localStorage.setItem('user_contents', contents);
     }
     handleSubmit(obj) {
-        const {contents} = this.state;
+        const {contents} = this.props;
         contents.push(obj);
         contents.map((obj_origin, i) => obj_origin.index = i)
         console.log(contents);
@@ -37,7 +36,7 @@ class TodoApp extends React.Component {
         }, this._saveLocalStorage());
     }
     handleRestore(index) {
-        const {contents} = this.state;
+        const {contents} = this.props;
         contents[index].flag = true;
         console.log(contents[index].content + "变成了true");
         this.setState({
@@ -47,7 +46,7 @@ class TodoApp extends React.Component {
         })
     }
     handleDelete(index) {
-        const {contents} = this.state;
+        const {contents} = this.props;
         contents[index].flag = false;
         console.log(contents[index].content + "变false");
         this.setState({
@@ -61,7 +60,7 @@ class TodoApp extends React.Component {
         console.log(search_key);
     }
     handleClearAll() {
-        const {contents} = this.state;
+        const {contents} = this.props;
         const new_contents = [];
         let i = 0;
         for ( let obj of contents ) {
@@ -82,7 +81,7 @@ class TodoApp extends React.Component {
     }
 
     render() {
-        const {contents} = this.state;
+        const {contents} = this.props;
         let need_to_do = [];
         let finish = [];
         for ( let obj of contents ) {
@@ -104,4 +103,21 @@ class TodoApp extends React.Component {
     }
 }
 
-export default TodoApp;
+TodoApp.propTypes={
+    contents:PropTypes.array
+}
+const mapStateToProps=(state)=>{
+    return {
+        contents:state.contents
+    }
+}
+
+const mapDispatchToProps=(dispatch)=>{
+    return {
+        addTodo:(content)=>{
+            dispatch(addTodo(content));
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(TodoApp);
