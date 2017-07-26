@@ -75,7 +75,7 @@ export default class TodoInput extends React.Component {
     render() {
         return (
             <div className="input-all-wrapper" onKeyDown={this.handleKeyDownEnter.bind(this)}>
-              <input className="input-input" onChange={this.handleChange.bind(this)}
+                <input className="input-input" onChange={this.handleChange.bind(this)}
             value={this.state.content} placeholder="今日计划"
             ref={(input) => {
                 this.input = input
