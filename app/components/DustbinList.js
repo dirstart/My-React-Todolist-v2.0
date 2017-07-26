@@ -2,11 +2,7 @@ import React from 'react';
 import DustbinContent from './DustbinContent';
 import PropTypes from 'prop-types';
 
-class DustbinList extends React.Component {
-    static propTypes = {
-        contents: PropTypes.array,
-        onHandleRestore: PropTypes.func
-    }
+export default class DustbinList extends React.Component {
     static defaultProps = {
         contents: []
     }
@@ -16,15 +12,16 @@ class DustbinList extends React.Component {
         }
     }
     render() {
-        return (
-            <div className="dustbin-all-wrapper">
-				{this.props.contents.map((obj, i) => {
+        return (<div className="dustbin-all-wrapper">
+			{this.props.contents.map((obj, i) => {
                 return <DustbinContent key={i} index={obj.index} content={obj.content}
                     onHandleRestore={this.handleRestore.bind(this)}
                     />
             })}
-			</div>)
+		</div>)
     }
 }
-
-export default DustbinList
+DustbinList.propTypes = {
+    contents: PropTypes.array,
+    onHandleRestore: PropTypes.func
+}

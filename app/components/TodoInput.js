@@ -1,12 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-class TodoInput extends React.Component {
-    static propTypes = {
-        onSubmit: PropTypes.func,
-        onClearAll: PropTypes.func,
-        onSearch: PropTypes.func
-    }
+export default class TodoInput extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -15,11 +9,7 @@ class TodoInput extends React.Component {
             search_key: ''
         }
     }
-    componentDidMount() {
-        this.input.focus();
-    }
-
-    handleSubmit() {
+    handleClick() {
         if (this.state.content === '') {
             console.log("没有任务");
             let t;
@@ -35,7 +25,9 @@ class TodoInput extends React.Component {
                 }, 2000);
             })
             return;
-        }else if (this.props.onSubmit) {
+        }
+        //这里应该采用正则表达式来解决
+        if (this.props.onSubmit) {
             this.props.onSubmit({
                 content: this.state.content,
                 flag: true
@@ -62,7 +54,7 @@ class TodoInput extends React.Component {
     handleKeyDownEnter(event) {
         event.stopPropagation();
         if (event.key === 'Enter') {
-            this.handleSubmit();
+            this.handleClick();
         } else {
             return;
         }
@@ -77,22 +69,31 @@ class TodoInput extends React.Component {
             this.props.onSearch(this.state.search_key);
         }
     }
-
+    componentDidMount() {
+        this.input.focus();
+    }
     render() {
         return (
             <div className="input-all-wrapper" onKeyDown={this.handleKeyDownEnter.bind(this)}>
-				<input className="input-input" onChange={this.handleChange.bind(this)}
-            value={this.state.content} placeholder="今日计划"  ref={(input) => {
+              <input className="input-input" onChange={this.handleChange.bind(this)}
+            value={this.state.content} placeholder="今日计划"
+            ref={(input) => {
                 this.input = input
             }}/>
-				<button className="button-send" onClick={this.handleSubmit.bind(this)}>Add</button>
-				<input className="input-search" onChange={this.handleSearchChange.bind(this)}
-            value={this.state.search_key}	placeholder="搜索计划"/>
-				<button className="button-search" onClick={this.handleSearch.bind(this)}>Search</button>
-				<button className="button-clear" onClick={this.handleClearAll.bind(this)}>Clear</button>
-				{this.state.suspension ? (<div className="suspension">请输入内容</div>) : null}
-			</div>)
+                <button className="button-send" onClick={this.handleClick.bind(this)}
+            >Add</button>
+                <input className="input-search" onChange={this.handleSearchChange.bind(this)}
+            value={this.state.search_key}   placeholder="搜索计划"/>
+                <button className="button-search" onClick={this.handleSearch.bind(this)}>Search</button>
+                <button className="button-clear" onClick={this.handleClearAll.bind(this)}>Clear</button>
+                {this.state.suspension ? (<div className="suspension">请输入内容</div>) : null}
+            </div>
+        )
     }
 }
 
-export default TodoInput;
+TodoInput.propTyeps = {
+    onSubmit: PropTypes.func,
+    onClearAll: PropTypes.func,
+    onSearch: PropTypes.func
+}

@@ -1,31 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-class TodoContent extends React.Component {
-    static propTypes = {
-        content: PropTypes.string,
-        onDeleteContent: PropTypes.func
-    }
+export default class TodoContent extends React.Component {
     static defaultProps = {
         content: ''
     }
     HandleDelete() {
-        if (this.props.onDeleteContent) {
-            this.props.onDeleteContent(this.props.index);
+        if (this.props.onHandleDelete) {
+            this.props.onHandleDelete(this.props.index);
         } else {
-            console.log("没有onDeleteContent");
+            console.log("没有onHandleDelete");
         }
     }
-    componentWillMount() {
-        // console.log("我被调用了");
-    }
     render() {
-        return (
-            <div className="list-content-wrapper" >
-				<div className="list-content">{this.props.content}</div>
-				<span className="list-delete" onClick={this.HandleDelete.bind(this)}>删除</span>
-			</div>
-        )
+        return (<div className="list-content-wrapper" >
+			<div className="list-content">{this.props.content}</div>
+			<span className="list-delete" onClick={this.HandleDelete.bind(this)}
+            >删除</span>
+		</div>)
     }
 }
-
-export default TodoContent;
+TodoContent.PropTypes = {
+    content: PropTypes.string,
+    onHandleDelete: PropTypes.func
+}

@@ -1,19 +1,15 @@
 import React from 'react';
 import TodoContent from './TodoContent';
 import PropTypes from 'prop-types';
-class TodoList extends React.Component {
-	static PropTypes = {
-		contents: PropTypes.array,
-		onDeleteContent: PropTypes.func
-	}
+export default class TodoList extends React.Component {
 	static defaultProps = {
 		contents: []
 	}
 	handleDelete(index) {
-		if (this.props.onDeleteContent) {
-			this.props.onDeleteContent(index);
+		if (this.props.onHandleDelete) {
+			this.props.onHandleDelete(index);
 		} else {
-			console.log("TodoList 没有onDeleteContent");
+			console.log("TodoList 没有onHandleDelete");
 		}
 	}
 	render() {
@@ -21,11 +17,14 @@ class TodoList extends React.Component {
 		{
 			this.props.contents.map((obj,i)=>{
 				return <TodoContent  content={obj.content} key={i} index={obj.index} 
-				onDeleteContent={this.handleDelete.bind(this)}/>
+				onHandleDelete={this.handleDelete.bind(this)}/>
 			})
 		}
 		</div>)
 	}
 }
 
-export default TodoList;
+TodoList.PropTypes = {
+	contents: PropTypes.array,
+	onHandleDelete: PropTypes.func
+}
