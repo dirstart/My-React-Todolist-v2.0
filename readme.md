@@ -6,6 +6,8 @@
 * * *
 ##### 1.配置好了webpack对react,babel,less,css,stylus,html,jpg图片等的loader
 ##### 2.~~大方向上将App的逻辑往List上挪移，我们可以看到App更加简洁了，便于我们管理~~我又改主意了，还是都放在App里面吧，首先，这是个比较简单的项目，分在两个文件来维护逻辑反而会导致这个项目更加复杂混乱。
+##### 3.`initTodos`和`addTodo`完成(增加操作和加载操作)
+
 
 #  当前要做
 ##### 1.更改业务逻辑的位置，不在render中作筛选，改在其他地方做筛选
@@ -43,12 +45,49 @@
         this.props.addTodo(obj);
     }
 ```
-> 解决方案
-目前打算更改逻辑的位置
+> 
+解决方案1:
+目前打算更改逻辑的位置，显然这是很麻烦的。。我先不用这种方法解决
+解决方案2:
+我另外写一个变量存放初始数据，然后另外添加，另外保存在localStroage
+```
+    handleSubmit(obj) {
+        const {contents}=this.props;
+        const newContents=[...contents,obj];
+        localStorage.setItem('user_contents',JSON.stringify(newContents));
+        // 上面是localst自己的，下面才是store里的
+        this.props.addTodo(obj);
+    }
+```
+**但是这！！在逻辑上必然是有问题的，一件事情做成了两件事情！！！！非常有问题。**
+解决方案3：
+我感觉我顿悟了！！！！！！！！！！！！！，我可以在render里面写啊！！！！我在reducer给我新增的消息里面添加flag和index(分别判断todo是否完成和todo的id)，然后在render写，这样我就不用重复给我的所有信息赋值index了，我从store中来，从store中去！！！最主要的是，我也不用考虑异步的问题了。render永远在click之后那么可以保证存在localStorage的数据不会少掉一条
+
+##### 5.非常有趣的问题收录
+```
+  _loadLocalStorage() {
+        let contents = localStorage.getItem('user_contents');
+        if (contents && contents.length&&contents!=='[]') {
+            console.log(contents.length,contents[0],contents[1]);
+            console.log("进入了localStorage");
+            contents = JSON.parse(contents);
+            this.props.initTodos(contents);
+        //通过这里我们使localstorage对state里的数据起作用
+        } else {
+            console.log("localStorage里没有可加载的数据")
+        }
+    }
+和
+        localStorage.setItem('user_contents',contents);
+        // localStorage.setItem('user_contents', JSON.stringify(contents));
+        // 如果是stringify了之后判断就不同了哈哈哈
+```
 
 # 弄明白的
 ##### 1.所谓components和containers，其实大致上都是一样的东西，唯一的不同只是是否纯净。不如一个要接触localSt，一个不用接触，而除此之外，两者几乎是一样的。不过我们也能在其中感受到一些好处，比如说我在component里面的input写入判断是否为空，这样我在container就能放心的认定其传值有效。
 ##### 2.Redux中只需要把action创建函数的结果传给dispatch()方法即可发起一次dispatch过程
+##### 3.如果数据有变动那么就可能会render两次，比如我上文的init本地存储的操作，如果呢，没有那个init操作去改变数据，就只会出现一个render，而如果要是有了那个init，就会出现两次render,同时也可以看出我们每次在add一次之后会render
+##### 4.一个基础问题，[]是true，判断数组为空要  ``if(array && array.length)``
 
 # 需要弄明白的
 ##### 1.关于import进index.js里面的css的顺序问题

@@ -28,10 +28,7 @@ export default class TodoInput extends React.Component {
         }
         //这里应该采用正则表达式来解决
         if (this.props.onSubmit) {
-            this.props.onSubmit({
-                content: this.state.content,
-                flag: true
-            })
+            this.props.onSubmit(this.state.content)
         }
         this.setState({
             content: ''
