@@ -88,6 +88,17 @@
 ##### 2.Redux中只需要把action创建函数的结果传给dispatch()方法即可发起一次dispatch过程
 ##### 3.如果数据有变动那么就可能会render两次，比如我上文的init本地存储的操作，如果呢，没有那个init操作去改变数据，就只会出现一个render，而如果要是有了那个init，就会出现两次render,同时也可以看出我们每次在add一次之后会render
 ##### 4.一个基础问题，[]是true，判断数组为空要  ``if(array && array.length)``
-
+##### 5.下面这句话来自react小书----``我们可以把这种特性应用在 state 的更新上，我们禁止直接修改原来的对象，一旦你要修改某些东西，你就得把修改路径上的所有对象复制一遍``
+```
+    case DELETE_TODO:
+        return {
+            contents: [...state.contents.slice(0, action.index),
+                Object.assign({}, state.contents[action.index], {
+                    flag: false
+                }),
+                ...state.contents.slice(action.index + 1)
+            ]
+        }
+```
 # 需要弄明白的
 ##### 1.关于import进index.js里面的css的顺序问题

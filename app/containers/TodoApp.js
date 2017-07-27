@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 // The real Redux is start
 import { connect } from 'react-redux'
-import { addTodo, initTodos } from '../actions';
+import { addTodo, initTodos,deleteTodo } from '../actions';
 
 class TodoApp extends React.Component {
     componentWillMount() {
@@ -43,9 +43,7 @@ class TodoApp extends React.Component {
         })
     }
     handleDelete(index) {
-        const {contents} = this.props;
-        const a = contents[0];
-        console.log(contents);
+        this.props.deleteTodo(index);
     }
     handleSearch(search_key) {
         console.log(search_key);
@@ -102,7 +100,8 @@ class TodoApp extends React.Component {
 TodoApp.propTypes = {
     contents: PropTypes.array,
     addTodo: PropTypes.func,
-    initTodos: PropTypes.func
+    initTodos: PropTypes.func,
+    deleteTodo:PropTypes.func
 }
 // 通过这句话将content传给this.props用来代替原来的state
 const mapStateToProps = (state) => {
@@ -118,6 +117,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         initTodos: (contents) => {
             dispatch(initTodos(contents));
+        },
+        deleteTodo:(index)=>{
+            dispatch(deleteTodo(index));
         }
     }
 }
