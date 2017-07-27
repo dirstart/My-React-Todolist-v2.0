@@ -1,4 +1,4 @@
-import { ADD_TODO, INIT_TODOS, DELETE_TODO } from './actions';
+import { ADD_TODO, INIT_TODOS,TOGGLE_TODO } from './actions';
 let todo_index = 0;
 function todo_reducer(state, action) {
     if (!state) {
@@ -19,15 +19,15 @@ function todo_reducer(state, action) {
         return {
             contents: action.contents
         }
-    case DELETE_TODO:
+    case TOGGLE_TODO:
         return {
             contents: [...state.contents.slice(0, action.index),
                 Object.assign({}, state.contents[action.index], {
-                    flag: false
+                    flag: !state.contents[action.index].flag
                 }),
                 ...state.contents.slice(action.index + 1)
             ]
-        }
+        }  	
     default:
         return state;
     }

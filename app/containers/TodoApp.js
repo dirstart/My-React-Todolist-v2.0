@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 // The real Redux is start
 import { connect } from 'react-redux'
-import { addTodo, initTodos,deleteTodo } from '../actions';
+import { addTodo, initTodos,toggleTodo } from '../actions';
 
 class TodoApp extends React.Component {
     componentWillMount() {
@@ -33,17 +33,10 @@ class TodoApp extends React.Component {
         this.props.addTodo(content); //这句话是对state起作用的
     }
     handleRestore(index) {
-        const {contents} = this.props;
-        contents[index].flag = true;
-        console.log(contents[index].content + "变成了true");
-        this.setState({
-            contents: contents
-        }, () => {
-            this._saveLocalStorage();
-        })
+        this.props.toggleTodo(index);
     }
     handleDelete(index) {
-        this.props.deleteTodo(index);
+        this.props.toggleTodo(index);
     }
     handleSearch(search_key) {
         console.log(search_key);
@@ -90,8 +83,8 @@ class TodoApp extends React.Component {
             <div className="app-all-wrapper">
                 <TodoInput onSubmit={this.handleSubmit.bind(this)}
             onClearAll={this.handleClearAll.bind(this)} onSearch={this.handleSearch.bind(this)} />
-                <TodoList contents={need_to_do} onHandleDelete={this.handleDelete.bind(this)}/>
-                <DustbinList contents={finish} onHandleRestore={this.handleRestore.bind(this)}/>
+                <TodoList contents={need_to_do} onHandleDelete={index=>this.props.toggleTodo(index)}/>
+                <DustbinList contents={finish} onHandleRestore={index=>this.props.toggleTodo(index)}/>
             </div>
         )
     }
@@ -101,7 +94,7 @@ TodoApp.propTypes = {
     contents: PropTypes.array,
     addTodo: PropTypes.func,
     initTodos: PropTypes.func,
-    deleteTodo:PropTypes.func
+    toggleTodo:PropTypes.func
 }
 // 通过这句话将content传给this.props用来代替原来的state
 const mapStateToProps = (state) => {
@@ -118,8 +111,8 @@ const mapDispatchToProps = (dispatch) => {
         initTodos: (contents) => {
             dispatch(initTodos(contents));
         },
-        deleteTodo:(index)=>{
-            dispatch(deleteTodo(index));
+        toggleTodo:(index)=>{
+            dispatch(toggleTodo(index));
         }
     }
 }
