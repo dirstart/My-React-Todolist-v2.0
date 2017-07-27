@@ -101,6 +101,11 @@ function todo_reducer(state, action) {
 ```
 reducer中我的赋值过程是这样的，但是这也导致，每次不小心的刷新，todo_index又变回了 0 ！！！！！！！！！！
 必须保证todo_index为当前元素的值，因此我这个逻辑结构需要修改
+目前想到的解决方案有这么几种：
+1.在store中除了contents之外额外维护一个todo_index(最后我没做成功，用了第二种)
+2.直接在reducer中使用，但是增加一个localStorage来控制，防止其归零的情况
+
+
 # 弄明白的
 ##### 1.所谓components和containers，其实大致上都是一样的东西，唯一的不同只是是否纯净。不如一个要接触localSt，一个不用接触，而除此之外，两者几乎是一样的。不过我们也能在其中感受到一些好处，比如说我在component里面的input写入判断是否为空，这样我在container就能放心的认定其传值有效。
 ##### 2.Redux中只需要把action创建函数的结果传给dispatch()方法即可发起一次dispatch过程
