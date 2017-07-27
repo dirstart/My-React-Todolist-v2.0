@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 // The real Redux is start
 import { connect } from 'react-redux'
-import {addTodo} from '../actions';
+import {addTodo,initTodos} from '../actions';
 
 class TodoApp extends React.Component {
     componentWillMount() {
@@ -15,10 +15,11 @@ class TodoApp extends React.Component {
     _loadLocalStorage() {
         let contents = localStorage.getItem('user_contents');
         if (contents) {
+            console.log("我有数据");
             contents = JSON.parse(contents);
-            this.setState({
-                contents: contents
-            })
+            this.props.initTodos(contents);
+        }else{
+            console.log("meiyou")
         }
     }
     _saveLocalStorage() {
@@ -27,13 +28,7 @@ class TodoApp extends React.Component {
         localStorage.setItem('user_contents', contents);
     }
     handleSubmit(obj) {
-        const {contents} = this.props;
-        contents.push(obj);
-        contents.map((obj_origin, i) => obj_origin.index = i)
-        console.log(contents);
-        this.setState({
-            contents: contents
-        }, this._saveLocalStorage());
+        this.props.addTodo(obj);
     }
     handleRestore(index) {
         const {contents} = this.props;
@@ -82,6 +77,7 @@ class TodoApp extends React.Component {
 
     render() {
         const {contents} = this.props;
+        // 所以目前我是没有办法实现localStorage的，因为这个每次重新加载都是为空
         let need_to_do = [];
         let finish = [];
         for ( let obj of contents ) {
@@ -104,8 +100,11 @@ class TodoApp extends React.Component {
 }
 
 TodoApp.propTypes={
-    contents:PropTypes.array
+    contents:PropTypes.array,
+    addTodo:PropTypes.func,
+    initTodos:PropTypes.func
 }
+// 通过这句话将content传给this.props用来代替原来的state
 const mapStateToProps=(state)=>{
     return {
         contents:state.contents
@@ -116,6 +115,9 @@ const mapDispatchToProps=(dispatch)=>{
     return {
         addTodo:(content)=>{
             dispatch(addTodo(content));
+        },
+        initTodos:(contents)=>{
+            dispatch(initTodos(contents));
         }
     }
 }
