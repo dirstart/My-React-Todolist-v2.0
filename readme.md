@@ -7,6 +7,8 @@
 ##### 1.配置好了webpack对react,babel,less,css,stylus,html,jpg图片等的loader
 ##### 2.~~大方向上将App的逻辑往List上挪移，我们可以看到App更加简洁了，便于我们管理~~我又改主意了，还是都放在App里面吧，首先，这是个比较简单的项目，分在两个文件来维护逻辑反而会导致这个项目更加复杂混乱。
 ##### 3.`initTodos`和`addTodo`完成(增加操作和加载操作)
+##### 4.修改deleteTodo和RestoreTodo为 ==== > toggleTodo,两者逻辑相反。
+##### 5.添加index的逻辑放置到reducer中，因为简化了handle函数操作，同时将handle改为箭头函数直接放入render之中
 
 
 #  当前要做
@@ -82,7 +84,23 @@
         // localStorage.setItem('user_contents', JSON.stringify(contents));
         // 如果是stringify了之后判断就不同了哈哈哈
 ```
-
+##### 6.关于reducer中的todo_index赋值出现的严重问题。
+```
+import { ADD_TODO, INIT_TODOS,TOGGLE_TODO,CLEAR_TODOS } from './actions';
+let todo_index = 0;
+function todo_reducer(state, action) {
+    if (!state) {
+        state = {
+            contents: []
+        }
+    }
+    switch (action.type) {
+    case ADD_TODO:
+    	console.log(todo_index);
+        retur
+```
+reducer中我的赋值过程是这样的，但是这也导致，每次不小心的刷新，todo_index又变回了 0 ！！！！！！！！！！
+必须保证todo_index为当前元素的值，因此我这个逻辑结构需要修改
 # 弄明白的
 ##### 1.所谓components和containers，其实大致上都是一样的东西，唯一的不同只是是否纯净。不如一个要接触localSt，一个不用接触，而除此之外，两者几乎是一样的。不过我们也能在其中感受到一些好处，比如说我在component里面的input写入判断是否为空，这样我在container就能放心的认定其传值有效。
 ##### 2.Redux中只需要把action创建函数的结果传给dispatch()方法即可发起一次dispatch过程
@@ -100,5 +118,20 @@
             ]
         }
 ```
+##### 6.只有通过action才能修改数据，否则都是无效的
+```
+    handleSubmit(content) {
+        // const {contents}=this.props;
+        // const newContents=[...contents,content];  
+        // 经过测试，这句话并不起作用
+        // 符合预期，只能通过action调用state.
+        // localStorage.setItem('user_contents',JSON.stringify(newContents));
+        // 上面是localst自己的，下面才是store里的
+        this.props.addTodo(content); //这句话是对state起作用的
+    }
+```
+##### 7.有时候优化逻辑，才是简化代码的最好办法，当然寻找一种看起来舒爽的编码方式也是有效的
+**比如说我在自己render中加入的localStorage.setItem，简直少了无数步代码，少了异步操作**
+因为每一次修改数据，都会调用一次render，而直接写在render的开头，刚好。
 # 需要弄明白的
 ##### 1.关于import进index.js里面的css的顺序问题
