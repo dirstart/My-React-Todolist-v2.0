@@ -16,8 +16,7 @@ class TodoApp extends React.Component {
         let contents = localStorage.getItem('user_contents');
         if (contents && contents.length && contents !== '[]') {
             console.log("进入了localStorage");
-            contents = JSON.parse(contents);
-            this.props.initTodos(contents);
+            this.props.initTodos(JSON.parse(contents));
         } else {
             console.log("localStorage里没有可加载的数据")
         }
@@ -25,11 +24,6 @@ class TodoApp extends React.Component {
     handleSearch(search_key) {
         console.log(search_key);
     }
-    handleClearAll() {
-        const {contents} = this.props;
-        const new_contents = [];
-    }
-
     render() {
         const {contents} = this.props;
         console.log("render了一次");

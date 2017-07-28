@@ -1,12 +1,11 @@
 import { ADD_TODO, INIT_TODOS, TOGGLE_TODO, CLEAR_TODOS } from './actions';
 let tem = localStorage.getItem('id'),
-	todo_index = (tem !== null) ? tem : 0;  
+    todo_index = (tem !== null) ? tem : 0;
 const save = () => {
-	console.log(todo_index);
-    localStorage.setItem('id', todo_index)
+    localStorage.setItem('id', todo_index);
 }
-const save2=(s)=>{
-	localStorage.setItem('id',s);
+const set_save = (tem) => {
+    localStorage.setItem('id', tem);
 }
 
 function todo_reducer(state, action) {
@@ -17,7 +16,7 @@ function todo_reducer(state, action) {
     }
     switch (action.type) {
     case ADD_TODO:
-    	save();
+        save();
         return {
             contents: [...state.contents, {
                 content: action.content,
@@ -39,14 +38,9 @@ function todo_reducer(state, action) {
             ]
         }
     case CLEAR_TODOS:
-        todo_index = 0;
-        let x=0;
-        let b=state.contents;
-        b.map(obj=>{
-			if(obj.flag===true)
-				x++;
-        });
-       	save2(x-1);
+        todo_index = tem = 0;
+        state.contents.map(obj => obj.flag === true && todo_index++);
+        set_save(tem - 1);
         return {
             contents: state.contents.filter(obj => obj.flag).map(obj => {
                 return Object.assign({}, obj, {

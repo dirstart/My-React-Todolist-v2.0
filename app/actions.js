@@ -5,7 +5,6 @@ export const TOGGLE_TODO='TOGGLE_TODO';
 export const CLEAR_TODOS='CLEAR_TODOS';
 
 // action 创建函数
-// 这里的index相当于是在中间层加上去的
 export function addTodo(content) {
     return {
         type: ADD_TODO,
