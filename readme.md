@@ -10,6 +10,14 @@
 ##### 4.修改deleteTodo和RestoreTodo为 ==== > toggleTodo,两者逻辑相反。
 ##### 5.添加index的逻辑放置到reducer中，不过并没有放在state外面，因为简化了handle函数操作，同时将handle改为箭头函数直接放入render之中
 
+#  待确定
+### 经过react群里的前辈建议，可以不用写那么多bind(this)，可以将函数写成
+```
+name=(param)=>{
+    // todo
+}
+```
+之后调用的时候  `onClick={this.name}`  即可
 
 #  当前要做
 ##### 1.更改业务逻辑的位置，不在render中作筛选，改在其他地方做筛选(2017-7-28至今未做。)
@@ -149,5 +157,7 @@ reducer中我的赋值过程是这样的，但是这也导致，每次不小心�
 ##### 7.有时候优化逻辑，才是简化代码的最好办法，当然寻找一种看起来舒爽的编码方式也是有效的
 **比如说我在自己render中加入的localStorage.setItem，简直少了无数步代码，少了异步操作**
 因为每一次修改数据，都会调用一次render，而直接写在render的开头，刚好。
+
+
 # 需要弄明白的
 ##### 1.关于import进index.js里面的css的顺序问题
